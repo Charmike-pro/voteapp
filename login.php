@@ -9,28 +9,25 @@
     <p class="mb-0"></a></p>
   </div>
 
-  <form name="register">
+  <form name="login">
     <fieldset>
-      <legend>Register</legend>
+      <legend>Login</legend>
       <div class="form-group">
         <label for="username">Username</label>
-        <input name="username" type="text" class="form-control" placeholder="user name">
+        <input name="username" type="text" class="form-control" placeholder="username">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
         <input name="password" type="password" class="form-control" placeholder="password">
       </div>
-      <div class="form-group">
-        <label for="password">Confirm password</label>
-        <input name="confirmPassword" type="password" class="form-control" placeholder="password again">
-      </div>
-      <button type="submit" class="btn btn-primary">Register</button>
+
+      <button type="submit" class="btn btn-primary">Login</button>
     </fieldset>
   </form>
 
 </div>
 
 <script src="js/common.js"></script>
-<script src="js/register.js"></script>
-<?php include_once 'layout/bottom.inc.php'; ?>
+<script src="js/login.js"></script>
 
+<?php include_once 'layout/bottom.inc.php'; ?>
