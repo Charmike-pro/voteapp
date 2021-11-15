@@ -1,4 +1,20 @@
 
+window.addEventListener('load', getPolls);
+document.getElementById('votesUl').addEventListener('click', openPoll);
+
+let data = null;
+
+function getPolls(){
+    console.log('Haetaan data')
+    let ajax = new XMLHttpRequest();
+    ajax.onload = function(){
+        data = JSON.parse(this.responseText);
+        showPolls(data);
+    }
+    ajax.open("GET", "backend/getPolls.php?show_all=1");
+    ajax.send();
+}
+
 function showPolls(data, type = 'current'){
     
     const ul = document.getElementById("votesUl");

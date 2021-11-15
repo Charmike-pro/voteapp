@@ -9,6 +9,22 @@
     <?php endif; ?>
 </div>
 
+<div class="container">
+
+    <div id="msg" class="alert alert-dismissible alert-warning d-none">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading"></h4> 
+        <p class="mb-0"></a></p>
+    </div>
+
+    <h2>Votes</h2>
+    <button class="btn btn-info" onclick="showPolls(data,'current')">Current polls</button>
+    <button class="btn btn-info" onclick="showPolls(data,'old')">Old polls</button>
+    <button class="btn btn-info" onclick="showPolls(data,'future')">Future polls</button>
+    <ul id="votesUl" class="list-group">
+    </ul>
+
+</div>
 
 <script src="js/index.js"></script>
 <script src="js/common.js"></script>
