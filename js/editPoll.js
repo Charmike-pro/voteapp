@@ -6,9 +6,12 @@ if (pollParams.has('id')){
 }
 
 let optionCount = 0;
+let toDelete = [];
 
 document.getElementById('addOption').addEventListener('click', addNewOption);
 document.getElementById('deleteLastOption').addEventListener('click', deleteLastOption);
+document.forms['editPoll'].addEventListener('submit', savePoll)
+document.querySelector('fieldset').addEventListener('click', getFieldsetClick);
 
 function getPollData(id){
     console.log(id);
@@ -27,16 +30,14 @@ function getPollData(id){
 function populatePollForm(data){
     document.forms['editPoll']['id'].value = data.id;
     document.forms['editPoll']['topic'].value = data.topic;
-    document.forms['editPoll']['start'].value = data.start.replace(" ","T");
-    document.forms['editPoll']['end'].value = data.end.replace(" ","T");
+    document.forms['editPoll']['start'].value = data.start.replace(" ", "T");
+    document.forms['editPoll']['end'].value = data.end.replace(" ", "T");
 
     const target = document.querySelector('fieldset');
 
     data.options.forEach(function(option){
-        console.log(option);
         optionCount++;
-        target.appendChild(createOptionInputDiv(optionCount, option.name, option.id))
-
+        target.appendChild(createOptionInputDiv(optionCount, option.name, option.id));
     })
 }
 
@@ -73,10 +74,18 @@ function createOptionInputDiv(count, name, id){
 
     input.dataset.optionid = id;
 
-    input.value = name
+    input.value = name;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.className = "btn btn-sm btn-danger float-right";
+
+    const deleteText = document.createTextNode('Delete');
+    deleteButton.appendChild(deleteText);
+    deleteButton.dataset.action = 'delete';
 
     div.appendChild(label);
     div.appendChild(input);
+    div.appendChild(deleteButton);
 
     return div;
     
@@ -84,10 +93,10 @@ function createOptionInputDiv(count, name, id){
 }
 
 function deleteLastOption(event){
-    
+
     event.preventDefault();
-    
-    if (optionCount <= 2) {
+
+    if(optionCount <= 2){
         return;
     }
 
@@ -103,13 +112,16 @@ function addNewOption(event){
 
     event.preventDefault();
 
+    if(optionCount >= 10){
+        return;
+    }
+
     optionCount++;
 
-    // Create new div 
     const div = document.createElement('div');
     div.classList.add('form-group');
-    
-    // Create new label
+
+
     const label = document.createElement('label');
     const forAttribute = document.createAttribute('for');
     const labelText = document.createTextNode(`Option ${optionCount}`);
@@ -117,9 +129,8 @@ function addNewOption(event){
     label.setAttributeNode(forAttribute);
     label.appendChild(labelText);
 
-    // Create new input 
     const input = document.createElement('input');
-    
+
     input.classList.add('form-control');
 
     const inputType = document.createAttribute('type');
@@ -130,14 +141,71 @@ function addNewOption(event){
     inputName.value = `option${optionCount}`;
     input.setAttributeNode(inputName);
 
-    const inputPlaceHolder = document.createAttribute('placeholder');
-    inputPlaceHolder.value = `Option ${optionCount}`;
-    input.setAttributeNode(inputPlaceHolder);
+    const inputPlaceholder = document.createAttribute('placeholder');
+    inputPlaceholder.value = `Option ${optionCount}`;
+    input.setAttributeNode(inputPlaceholder);
 
     div.appendChild(label);
     div.appendChild(input);
 
+
     document.querySelector('fieldset').appendChild(div);
-    console.log(div);
- 
+
+}
+
+function savePoll(event){
+    event.preventDefault();
+
+    let pollData = {};
+    pollData.id = document.forms['editPoll']['id'].value;
+    pollData.topic = document.forms['editPoll']['topic'].value;
+    pollData.start = document.forms['editPoll']['start'].value;
+    pollData.end = document.forms['editPoll']['end'].value;
+
+    // Kerää Vaihtoehdot
+    const options = [];
+    const inputs = document.querySelectorAll('input');
+
+    inputs.forEach(function (input) {
+        if (input.name.indexOf('option') == 0) {
+            options.push({ id: input.dataset.optionid, name: input.value })
+        }
+    })
+
+    pollData.options = options;
+
+    pollData.todelete = toDelete;
+
+
+    let ajax = new XMLHttpRequest();
+    ajax.onload = function () {
+        let data = JSON.parse(this.responseText);
+        if (data.hasOwnProperty("success")) {
+            window.location.href = "admin.php?type=success&msg=Edit successful!";
+        }
+        else {
+            showMessage("error", data.error);
+        }
+    }
+    ajax.open("POST", "backend/modifyPoll.php", true);
+    ajax.setRequestHeader("Content-Type", "application/json");
+    ajax.send(JSON.stringify(pollData));
+
+}
+
+function getFieldsetClick(event){
+
+    event.preventDefault();
+
+    let btn = event.target;
+
+    if(btn.dataset.action == 'delete'){
+        let div = btn.parentElement;
+        let input = div.querySelector('input');
+        let fieldset = div.parentElement;
+        toDelete.push({id: input.dataset.optionid});
+        fieldset.removeChild(div);
+        
+    }
+
 }

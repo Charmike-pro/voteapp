@@ -33,14 +33,6 @@ if (!isset($_SESSION['logged_in'])){
       </div>
 
       <h4>Poll options</h4> <button class="btn btn-primary" id="addOption">Add option</button>
-      <div class="form-group">
-        <label for="option1">Option 1</label>
-        <input name="option1" type="text" class="form-control" placeholder="Option 1">
-      </div>
-      <div class="form-group">
-        <label for="option2">Option 2</label>
-        <input name="option2" type="text" class="form-control" placeholder="Option 2">
-      </div>
       <!-- Additional options go here -->
 
     </fieldset>

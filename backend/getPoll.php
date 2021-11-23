@@ -10,16 +10,16 @@ $pollid = $_GET['id'];
 include_once 'pdo-connect.php';
 
 try {
-    $stmt = $conn->prepare("SELECT id, topic, start, end, user_id FROM poll WHERE id = :pollid");
+    $stmt = $conn->prepare("SELECT id, topic, start, end, user_id FROM poll WHERE id = :poll_id");
 
-    $stmt->bindParam(':pollid', $pollid);
+    $stmt->bindParam(':poll_id', $pollid);
 
     if ($stmt->execute() == false){
         $data = array(
             'error' => 'Error occured!'
         );
     } else {
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $data = $result;
     }
 } catch (PDOException $e) {
@@ -30,8 +30,8 @@ try {
 
 // Get options from database
 try {
-    $stmt = $conn->prepare("SELECT id, name, votes FROM option WHERE poll_id = :pollid");
-    $stmt->bindParam(':pollid', $pollid);
+    $stmt = $conn->prepare("SELECT id, name, votes FROM option WHERE poll_id = :poll_id");
+    $stmt->bindParam(':poll_id', $pollid);
 
     if ($stmt->execute() == false){
         $data = array(
