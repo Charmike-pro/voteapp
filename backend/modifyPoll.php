@@ -28,7 +28,6 @@ try{
         $data['error'] = 'Error';
     }else{
         $data['success'] = 'Success';
-        
     }
 
 }catch(PDOException $e){

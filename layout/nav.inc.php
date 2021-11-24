@@ -17,6 +17,9 @@
             </li>
             <?php if (isset($_SESSION['logged_in'])): ?>
               <li class="nav-item">
+                <a class="nav-link" href="admin.php">My votes</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="logout.php">Logout</a>
               </li>
             <?php else: ?>

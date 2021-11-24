@@ -10,21 +10,19 @@ let toDelete = [];
 
 document.getElementById('addOption').addEventListener('click', addNewOption);
 document.getElementById('deleteLastOption').addEventListener('click', deleteLastOption);
-document.forms['editPoll'].addEventListener('submit', savePoll)
+document.forms['editPoll'].addEventListener('submit', modifyPoll)
 document.querySelector('fieldset').addEventListener('click', getFieldsetClick);
 
 function getPollData(id){
-    console.log(id);
     let ajax = new XMLHttpRequest();
     ajax.onload = function(){
         data = JSON.parse(this.responseText);
-        console.log(data);
         populatePollForm(data);
     }
     ajax.open("GET", "backend/getPoll.php?id=" + id);
     ajax.send();
-
 }
+
 
 
 function populatePollForm(data){
@@ -153,7 +151,7 @@ function addNewOption(event){
 
 }
 
-function savePoll(event){
+function modifyPoll(event){
     event.preventDefault();
 
     let pollData = {};
@@ -162,12 +160,11 @@ function savePoll(event){
     pollData.start = document.forms['editPoll']['start'].value;
     pollData.end = document.forms['editPoll']['end'].value;
 
-    // Kerää Vaihtoehdot
     const options = [];
     const inputs = document.querySelectorAll('input');
 
-    inputs.forEach(function (input) {
-        if (input.name.indexOf('option') == 0) {
+    inputs.forEach(function(input){
+        if(input.name.indexOf('option') == 0){
             options.push({ id: input.dataset.optionid, name: input.value })
         }
     })
@@ -176,23 +173,16 @@ function savePoll(event){
 
     pollData.todelete = toDelete;
 
-
     let ajax = new XMLHttpRequest();
-    ajax.onload = function () {
+    ajax.onload = function(){
         let data = JSON.parse(this.responseText);
-        if (data.hasOwnProperty("success")) {
-            window.location.href = "admin.php?type=success&msg=Edit successful!";
-        }
-        else {
-            showMessage("error", data.error);
-        }
+        console.log(data);
     }
     ajax.open("POST", "backend/modifyPoll.php", true);
     ajax.setRequestHeader("Content-Type", "application/json");
     ajax.send(JSON.stringify(pollData));
 
 }
-
 function getFieldsetClick(event){
 
     event.preventDefault();
