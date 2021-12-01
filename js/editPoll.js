@@ -44,25 +44,23 @@ function populatePollForm(data){
     })
 }
 
-// createOptionInputDiv -
-// Creates new input-field to form
+
 function createOptionInputDiv(count, name, id){
 
-    // crete new div
     const div = document.createElement('div');
     div.classList.add('form-group');
 
-    // create new label
+  
     const label = document.createElement('label');
     const forAttribute = document.createAttribute('for');
-    const labelText = document.createTextNode(`option${count}`);
-    forAttribute.value = `option${count}`;
+    const labelText = document.createTextNode(`Option ${count}`);
+    forAttribute.value = `Option ${count}`;
     label.setAttributeNode(forAttribute);
     label.appendChild(labelText);
     label.classList.add('form-label');
     label.classList.add('mt-4');
 
-    // create new input
+
     const input = document.createElement('input');
     input.classList.add('form-control');
 
@@ -81,7 +79,6 @@ function createOptionInputDiv(count, name, id){
     input.dataset.optionid = id;
     input.value = name;
 
-    // Delete button
     const deleteButton = document.createElement('button');
     deleteButton.className = "btn btn-sm btn-danger float-right";
 
@@ -116,21 +113,19 @@ function addNewOption(event){
     event.preventDefault();
     optionCount++;
 
-    // crete new div
+
     const div = document.createElement('div');
     div.classList.add('form-group');
 
-    // create new label
     const label = document.createElement('label');
     const forAttribute = document.createAttribute('for');
-    const labelText = document.createTextNode(`option${optionCount}`);
-    forAttribute.value = `option${optionCount}`;
+    const labelText = document.createTextNode(`Option ${optionCount}`);
+    forAttribute.value = `Option ${optionCount}`;
     label.setAttributeNode(forAttribute);
     label.appendChild(labelText);
     label.classList.add('form-label');
     label.classList.add('mt-4');
 
-    // create new input
     const input = document.createElement('input');
 
     input.classList.add('form-control');
@@ -144,7 +139,7 @@ function addNewOption(event){
     input.setAttributeNode(inputName);
 
     const inputPlaceHolder = document.createAttribute('placeholder');
-    inputPlaceHolder.value = `option ${optionCount}`;
+    inputPlaceHolder.value = `option${optionCount}`;
     input.setAttributeNode(inputPlaceHolder);
     
     div.appendChild(label);
@@ -156,41 +151,34 @@ function addNewOption(event){
 
 function modifyPoll(event){
     event.preventDefault();
-    console.log('save change');
+    console.log('save changes');
 
-    // collect poll data from
     let pollData = {};
     pollData.id = document.forms['editPoll']['id'].value;
     pollData.topic = document.forms['editPoll']['topic'].value;
     pollData.start = document.forms['editPoll']['start'].value;
     pollData.end = document.forms['editPoll']['end'].value;
 
-    // Collect options
     const options = [];
     const inputs = document.querySelectorAll('input');
 
     inputs.forEach(function(input){
         if(input.name.indexOf('option') == 0){
-            options.push({ id: input.dataset.optionid, name: input.value})
+            options.push({ id: input.dataset.optionid, name: input.value});
         }
     })
 
     pollData.options = options;
 
-    // Delete options
     console.log(pollData);
     pollData.todelete = toDelete;
 
-    // Send data to backend
     let ajax = new XMLHttpRequest();
     ajax.onload = function(){
         let data = JSON.parse(this.responseText);
-        if (data.hasOwnProperty('success')){
-            window.location.href = "admin.php?type=successmsg=Poll edited"
-        } else {
-            showMessage('error', data.error);
+            console.log(data);
         }
-    }  
+    
     ajax.open("POST", "backend/modifyPoll.php", true);
     ajax.setRequestHeader("Content-Type", "application/json");
     ajax.send(JSON.stringify(pollData));
