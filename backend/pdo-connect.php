@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$db_username = "root";
-$db_password = "";
+$db_username = "pynnonen.pyry";
+$db_password = "PyrynK4nt4!";
 $dbname = "votedb";
 
 try {
