@@ -2,7 +2,7 @@
 $servername = "localhost";
 $db_username = "pynnonen.pyry";
 $db_password = "PyrynK4nt4!";
-$dbname = "votedb";
+$dbname = "pynnonen.pyry";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $db_username, $db_password);
