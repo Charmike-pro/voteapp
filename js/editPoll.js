@@ -176,7 +176,7 @@ function modifyPoll(event){
     let ajax = new XMLHttpRequest();
     ajax.onload = function(){
         let data = JSON.parse(this.responseText);
-            console.log(data);
+        window.location.href = "index.php?type=succes&msg=Poll edited!";
         }
     
     ajax.open("POST", "backend/modifyPoll.php", true);
